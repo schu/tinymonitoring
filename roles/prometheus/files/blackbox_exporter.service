@@ -1,0 +1,22 @@
+[Unit]
+Description=Prometheus Blackbox exporter
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-failure
+
+User=prometheus
+Group=prometheus
+
+WorkingDirectory=/var/lib/prometheus
+
+ExecStart=/usr/local/bin/blackbox_exporter --config.file /etc/prometheus/blackbox.yml --web.listen-address "127.0.0.1:9115"
+
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

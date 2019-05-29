@@ -1,0 +1,31 @@
+modules:
+  http_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      preferred_ip_protocol: ip4
+  http_302:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [302]
+      preferred_ip_protocol: ip4
+      no_follow_redirects: true
+  http_post_2xx:
+    prober: http
+    timeout: 5s
+    http:
+      method: POST
+  tcp_connect:
+    prober: tcp
+    timeout: 5s
+  ssh_banner:
+    prober: tcp
+    timeout: 5s
+    tcp:
+      preferred_ip_protocol: ip4
+      query_response:
+      - expect: "^SSH-2.0-"
+  icmp:
+    prober: icmp
+    timeout: 5s

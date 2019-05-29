@@ -1,0 +1,24 @@
+---
+- name: reload prometheus
+  systemd:
+    name: prometheus
+    state: reloaded
+    daemon_reload: yes
+
+- name: restart prometheus
+  systemd:
+    name: prometheus
+    state: restarted
+    daemon_reload: yes
+
+- name: reload blackbox_exporter
+  systemd:
+    name: blackbox_exporter
+    state: reloaded
+    daemon_reload: yes
+
+- name: restart blackbox_exporter
+  systemd:
+    name: blackbox_exporter
+    state: restarted
+    daemon_reload: yes

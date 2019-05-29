@@ -1,0 +1,86 @@
+---
+- name: create group
+  group:
+    name: prometheus
+    system: yes
+
+- name: create user
+  user:
+    name: prometheus
+    group: prometheus
+    system: yes
+    createhome: no
+    home: "{{ prometheus_home_dir }}"
+    shell: /sbin/nologin
+
+- name: create directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: prometheus
+    group: prometheus
+    mode: 0750
+  with_items:
+    - "{{ prometheus_home_dir }}"
+    - "{{ prometheus_data_dir }}"
+    - "{{ prometheus_config_dir }}"
+
+- stat: path=/tmp/prometheus-{{prometheus_version}}.linux-amd64.tar.gz
+  register: prometheus_tar_gz
+
+- name: download release
+  shell: |
+    cd /tmp
+    curl -fsSL https://github.com/prometheus/prometheus/releases/download/v{{prometheus_version}}/prometheus-{{prometheus_version}}.linux-amd64.tar.gz -O
+  when: prometheus_tar_gz.stat.exists == False
+
+- stat: path=/tmp/prometheus-{{prometheus_version}}.linux-amd64
+  register: prometheus_dist
+
+- name: unpack release
+  shell: |
+    cd /tmp
+    tar xvfz prometheus-{{prometheus_version}}.linux-amd64.tar.gz;
+  when: prometheus_dist.stat.exists == False
+
+- stat: path=/usr/local/bin/prometheus-{{prometheus_version}}
+  register: prometheus_bin
+
+- name: install prometheus to /usr/local/bin
+  shell: |
+    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus-{{prometheus_version}}
+    ln -sfn /usr/local/bin/prometheus-{{prometheus_version}} /usr/local/bin/prometheus
+  when: prometheus_bin.stat.exists == False
+
+- stat: path=/usr/local/bin/promtool-{{prometheus_version}}
+  register: promtool_bin
+
+- name: install promtool to /usr/local/bin
+  shell: |
+    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/promtool-{{prometheus_version}}
+    ln -sfn /usr/local/bin/promtool-{{prometheus_version}} /usr/local/bin/promtool
+  when: promtool_bin.stat.exists == False
+
+- name: install prometheus config
+  copy:
+    src: "{{ prometheus_config }}"
+    dest: /etc/prometheus/prometheus.yml
+    owner: prometheus
+    group: prometheus
+    backup: yes
+    validate: promtool check config %s
+  notify: restart prometheus
+
+- name: install prometheus.service
+  template:
+    src: prometheus.service
+    dest: /etc/systemd/system/prometheus.service
+  notify: restart prometheus
+
+- name: enable prometheus.service
+  systemd:
+    name: prometheus
+    enabled: true
+
+- include: blackbox-exporter.yml
+  when: install_blackbox_exporter | bool

@@ -1,0 +1,11 @@
+---
+prometheus_version: 2.9.1
+prometheus_home_dir: "/var/lib/prometheus"
+prometheus_data_dir: "{{ prometheus_home_dir }}/data"
+prometheus_config_dir: "/etc/prometheus"
+prometheus_web_external_url: "http://127.0.0.1:9090"
+prometheus_config: "prometheus.yml"
+
+install_blackbox_exporter: false
+blackbox_exporter_version: 0.14.0
+blackbox_exporter_config: "blackbox.yml"

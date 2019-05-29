@@ -1,0 +1,48 @@
+---
+- stat: path=/tmp/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64.tar.gz
+  register: blackbox_exporter_tar_gz
+
+- name: download blackbox exporter
+  shell: |
+    cd /tmp
+    curl -ssL https://github.com/prometheus/blackbox_exporter/releases/download/v{{blackbox_exporter_version}}/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64.tar.gz -O
+  when: blackbox_exporter_tar_gz.stat.exists == false
+
+- stat: path=/tmp/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64
+  register: blackbox_exporter_dist
+
+- name: unpack release
+  shell: |
+    cd /tmp
+    tar xvfz blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64.tar.gz;
+  when: blackbox_exporter_dist.stat.exists == False
+
+- stat: path=/usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}}
+  register: blackbox_exporter_bin
+
+- name: install blackbox_exporter to /usr/local/bin
+  shell: |
+    mv /tmp/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64/blackbox_exporter /usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}}
+    ln -sfn /usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}} /usr/local/bin/blackbox_exporter
+  when: blackbox_exporter_bin.stat.exists == False
+
+- name: install blackbox_exporter config
+  copy:
+    src: "{{ blackbox_exporter_config }}"
+    dest: /etc/prometheus/blackbox.yml
+    owner: prometheus
+    group: prometheus
+    backup: yes
+    validate: blackbox_exporter --config.check --config.file %s
+  notify: restart blackbox_exporter
+
+- name: install blackbox_exporter.service
+  copy:
+    src: blackbox_exporter.service
+    dest: /etc/systemd/system/blackbox_exporter.service
+  notify: restart blackbox_exporter
+
+- name: enable blackbox_exporter.service
+  systemd:
+    name: blackbox_exporter
+    enabled: true
