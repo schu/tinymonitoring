@@ -1,0 +1,67 @@
+---
+- name: create group
+  group:
+    name: www-data
+    system: yes
+
+- name: create user
+  user:
+    name: www-data
+    group: www-data
+    system: yes
+    createhome: no
+    home: "{{ caddy_home_dir }}"
+    shell: /sbin/nologin
+
+- name: create directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: www-data
+    group: www-data
+    mode: 0750
+  with_items:
+    - "{{ caddy_home_dir }}"
+    - "/etc/caddy"
+    - "/etc/ssl/caddy"
+
+- name: determine installed caddy version
+  shell: caddy --version | awk '/Caddy/{print $2}'
+  register: caddy_version_output
+
+- name: set caddy_installed_version fact
+  set_fact: caddy_installed_version="{{caddy_version_output.stdout}}"
+
+- name: install caddy
+  shell: |
+    mkdir -p /tmp/caddy
+    cd /tmp/caddy
+    curl -fsSL -o caddy.tgz 'https://caddyserver.com/download/linux/amd64?plugins=http.prometheus&license=personal&telemetry=off'
+    tar -xf caddy.tgz
+    install -m 0755 caddy /usr/local/bin/caddy-{{caddy_version}}
+    setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy-{{caddy_version}}
+    ln -sf /usr/local/bin/caddy-{{caddy_version}} /usr/local/bin/caddy
+  args:
+    warn: false
+  when: caddy_installed_version != caddy_version
+
+- name: install caddyfile
+  copy:
+    src: "{{ caddy_file }}"
+    dest: /etc/caddy/Caddyfile
+    owner: www-data
+    group: www-data
+    backup: yes
+  notify: reload caddy
+
+- name: install caddy.service
+  copy:
+    src: caddy.service
+    dest: /etc/systemd/system/caddy.service
+  notify: restart caddy
+
+- name: enable caddy.service
+  systemd:
+    name: caddy
+    enabled: true
+    state: started
