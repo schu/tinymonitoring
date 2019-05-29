@@ -1,0 +1,22 @@
+[Unit]
+Description=Grafana
+After=network-online.target
+Wants=network-online.target systemd-networkd-wait-online.service
+
+[Service]
+Restart=on-failure
+
+User=grafana
+Group=grafana
+
+WorkingDirectory=/var/lib/grafana
+
+ExecStart=/usr/local/bin/grafana-server -config "{{ grafana_config_path }}" -homepath "/opt/grafana-{{ grafana_version }}"
+
+PrivateTmp=true
+PrivateDevices=true
+ProtectHome=true
+ProtectSystem=full
+
+[Install]
+WantedBy=multi-user.target

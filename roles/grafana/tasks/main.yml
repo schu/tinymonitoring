@@ -1,0 +1,62 @@
+---
+- name: create group
+  group:
+    name: grafana
+    system: yes
+
+- name: create user
+  user:
+    name: grafana
+    group: grafana
+    system: yes
+    createhome: no
+    home: "{{ grafana_home_dir }}"
+    shell: /sbin/nologin
+
+- name: create directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: grafana
+    group: grafana
+    mode: 0750
+  with_items:
+    - "{{ grafana_home_dir }}"
+    - "{{ grafana_config_dir }}"
+
+- name: determine installed grafana-server version
+  shell: grafana-server -v | awk '/Version/{print $2}'
+  register: grafana_version_output
+
+- name: set grafana_installed_version fact
+  set_fact: grafana_installed_version="{{grafana_version_output.stdout}}"
+
+- name: install grafana
+  shell: |
+    mkdir -p /tmp/grafana
+    cd /tmp/grafana
+    curl -fsSL -o grafana.tgz "https://dl.grafana.com/oss/release/grafana-{{ grafana_version }}.linux-amd64.tar.gz"
+    tar -C /opt/ -xf grafana.tgz
+    ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-server /usr/local/bin/grafana-server
+    ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-cli /usr/local/bin/grafana-cli
+  args:
+    warn: false
+  when: grafana_installed_version != grafana_version
+
+- name: install grafana config
+  template:
+    src: defaults.ini
+    dest: /etc/grafana/defaults.ini
+  notify: restart grafana
+
+- name: install grafana.service
+  template:
+    src: grafana.service
+    dest: /etc/systemd/system/grafana.service
+  notify: restart grafana
+
+- name: enable grafana.service
+  systemd:
+    name: grafana
+    enabled: true
+    state: started
