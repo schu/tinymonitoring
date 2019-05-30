@@ -84,3 +84,6 @@
 
 - include: blackbox-exporter.yml
   when: install_blackbox_exporter | bool
+
+- include: alertmanager.yml
+  when: install_alertmanager | bool

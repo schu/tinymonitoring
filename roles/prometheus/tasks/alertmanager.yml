@@ -1,0 +1,42 @@
+---
+- name: determine installed alertmanager version
+  shell: alertmanager --version 2>&1 | awk '/alertmanager, version/{print $3}'
+  register: alertmanager_version_output
+
+- name: set alertmanager_installed_version fact
+  set_fact: alertmanager_installed_version="{{alertmanager_version_output.stdout}}"
+
+- name: install alertmanager
+  shell: |
+    mkdir -p /tmp/alertmanager
+    cd /tmp/alertmanager
+    curl -fsSLO 'https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager_version }}/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz'
+    tar -xf "alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
+    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager" /usr/local/bin/alertmanager-{{ alertmanager_version }}
+    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/amtool" /usr/local/bin/amtool-{{ alertmanager_version }}
+    ln -sf /usr/local/bin/alertmanager-{{ alertmanager_version }} /usr/local/bin/alertmanager
+    ln -sf /usr/local/bin/amtool-{{ alertmanager_version }} /usr/local/bin/amtool
+  args:
+    warn: false
+  when: alertmanager_installed_version != alertmanager_version
+
+- name: install alertmanager config
+  copy:
+    src: "{{ alertmanager_config }}"
+    dest: /etc/prometheus/alertmanager.yml
+    owner: prometheus
+    group: prometheus
+    backup: yes
+    validate: amtool check-config %s
+  notify: restart alertmanager
+
+- name: install alertmanager.service
+  copy:
+    src: alertmanager.service
+    dest: /etc/systemd/system/alertmanager.service
+  notify: restart alertmanager
+
+- name: enable alertmanager.service
+  systemd:
+    name: alertmanager
+    enabled: true

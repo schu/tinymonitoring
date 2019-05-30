@@ -9,3 +9,7 @@ prometheus_config: "prometheus.yml"
 install_blackbox_exporter: false
 blackbox_exporter_version: 0.14.0
 blackbox_exporter_config: "blackbox.yml"
+
+install_alertmanager: false
+alertmanager_version: 0.20.0
+alertmanager_config: "alertmanager.yml"
