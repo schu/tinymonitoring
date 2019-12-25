@@ -34,8 +34,8 @@
 
 - name: install caddy
   shell: |
-    mkdir -p /tmp/caddy
-    cd /tmp/caddy
+    mkdir -p /tmp/caddy-{{ caddy_version }}
+    cd /tmp/caddy-{{ caddy_version }}
     curl -fsSL -o caddy.tgz 'https://caddyserver.com/download/linux/amd64?plugins=http.prometheus&license=personal&telemetry=off'
     tar -xf caddy.tgz
     install -m 0755 caddy /usr/local/bin/caddy-{{caddy_version}}
