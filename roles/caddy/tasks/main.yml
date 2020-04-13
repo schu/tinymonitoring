@@ -26,7 +26,7 @@
     - "/etc/ssl/caddy"
 
 - name: determine installed caddy version
-  shell: caddy --version | awk '/Caddy/{print $2}'
+  shell: caddy --version
   register: caddy_version_output
 
 - name: set caddy_installed_version fact
@@ -44,6 +44,7 @@
   args:
     warn: false
   when: caddy_installed_version != caddy_version
+  notify: restart caddy
 
 - name: install caddyfile
   copy:
