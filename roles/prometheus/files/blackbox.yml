@@ -11,6 +11,13 @@ modules:
       valid_status_codes: [302]
       preferred_ip_protocol: ip4
       no_follow_redirects: true
+  http_307:
+    prober: http
+    timeout: 5s
+    http:
+      valid_status_codes: [307]
+      preferred_ip_protocol: ip4
+      no_follow_redirects: true
   http_post_2xx:
     prober: http
     timeout: 5s
