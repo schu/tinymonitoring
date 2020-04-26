@@ -61,6 +61,19 @@
     ln -sfn /usr/local/bin/promtool-{{prometheus_version}} /usr/local/bin/promtool
   when: promtool_bin.stat.exists == False
 
+
+# Alert rules are part of the Prometheus config, so load them
+# here. promtool can only be used against the root Prometheus
+# config, the alert_rules are checked from there then.
+- name: install alert_rules config
+  copy:
+    src: "{{ alertmanager_rules_config }}"
+    dest: /etc/prometheus/alert_rules.yml
+    owner: prometheus
+    group: prometheus
+    backup: yes
+  notify: reload prometheus
+
 - name: install prometheus config
   copy:
     src: "{{ prometheus_config }}"
@@ -69,7 +82,7 @@
     group: prometheus
     backup: yes
     validate: promtool check config %s
-  notify: restart prometheus
+  notify: reload prometheus
 
 - name: install prometheus.service
   template:
