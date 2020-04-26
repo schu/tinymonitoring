@@ -23,6 +23,7 @@
   with_items:
     - "{{ grafana_home_dir }}/dashboards"
     - "{{ grafana_config_dir }}/conf/provisioning/dashboards"
+    - "{{ grafana_config_dir }}/conf/provisioning/datasources"
 
 - name: determine installed grafana-server version
   shell: grafana-server -v | awk '/Version/{print $2}'
@@ -55,7 +56,13 @@
     dest: "/etc/grafana/conf/provisioning/dashboards/default.yml"
   notify: restart grafana
 
-- name: copy grafana dashbaords
+- name: install grafana datasource provisioning config
+  copy:
+    src: datasource-provisioning-conf.yml
+    dest: "/etc/grafana/conf/provisioning/datasources/default.yml"
+  notify: restart grafana
+
+- name: copy grafana dashboards
   copy:
     src: "{{ item }}"
     dest: "{{ grafana_home_dir }}/dashboards"
