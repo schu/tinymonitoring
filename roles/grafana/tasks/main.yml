@@ -21,8 +21,8 @@
     group: grafana
     mode: 0750
   with_items:
-    - "{{ grafana_home_dir }}"
-    - "{{ grafana_config_dir }}"
+    - "{{ grafana_home_dir }}/dashboards"
+    - "{{ grafana_config_dir }}/conf/provisioning/dashboards"
 
 - name: determine installed grafana-server version
   shell: grafana-server -v | awk '/Version/{print $2}'
@@ -48,6 +48,19 @@
     src: defaults.ini
     dest: /etc/grafana/defaults.ini
   notify: restart grafana
+
+- name: install grafana dashboard provisioning config
+  copy:
+    src: dashboard-provisioning-conf.yml
+    dest: "/etc/grafana/conf/provisioning/dashboards/default.yml"
+  notify: restart grafana
+
+- name: copy grafana dashbaords
+  copy:
+    src: "{{ item }}"
+    dest: "{{ grafana_home_dir }}/dashboards"
+  loop: "{{ grafana_dashboard_files }}"
+  when: grafana_dashboard_files is defined
 
 - name: install grafana.service
   template:
