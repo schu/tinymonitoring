@@ -26,7 +26,7 @@
     - "/etc/ssl/caddy"
 
 - name: determine installed caddy version
-  shell: caddy --version
+  shell: "caddy --version || true"
   register: caddy_version_output
 
 - name: set caddy_installed_version fact
