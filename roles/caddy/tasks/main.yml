@@ -52,7 +52,6 @@
     dest: /etc/caddy/Caddyfile
     owner: www-data
     group: www-data
-    backup: yes
   notify: reload caddy
 
 - name: install caddy.service

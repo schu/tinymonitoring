@@ -26,7 +26,6 @@
     dest: /etc/prometheus/alertmanager.yml
     owner: prometheus
     group: prometheus
-    backup: yes
     validate: amtool check-config %s
   notify: restart alertmanager
 

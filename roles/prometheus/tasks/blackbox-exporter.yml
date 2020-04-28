@@ -32,7 +32,6 @@
     dest: /etc/prometheus/blackbox.yml
     owner: prometheus
     group: prometheus
-    backup: yes
     validate: blackbox_exporter --config.check --config.file %s
   notify: restart blackbox_exporter
 

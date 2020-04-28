@@ -71,7 +71,6 @@
     dest: /etc/prometheus/alert_rules.yml
     owner: prometheus
     group: prometheus
-    backup: yes
   notify: reload prometheus
 
 - name: install prometheus config
@@ -80,7 +79,6 @@
     dest: /etc/prometheus/prometheus.yml
     owner: prometheus
     group: prometheus
-    backup: yes
     validate: promtool check config %s
   notify: reload prometheus
 
