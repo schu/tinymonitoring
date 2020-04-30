@@ -4,6 +4,13 @@ modules:
     timeout: 5s
     http:
       preferred_ip_protocol: ip4
+  http_2xx_insecure_skip_verify:
+    prober: http
+    timeout: 5s
+    http:
+      preferred_ip_protocol: ip4
+      tls_config:
+        insecure_skip_verify: true
   http_302:
     prober: http
     timeout: 5s
