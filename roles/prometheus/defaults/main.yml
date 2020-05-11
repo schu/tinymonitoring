@@ -5,6 +5,7 @@ prometheus_data_dir: "{{ prometheus_home_dir }}/data"
 prometheus_config_dir: "/etc/prometheus"
 prometheus_web_external_url: "http://127.0.0.1:9090"
 prometheus_config: "prometheus.yml"
+prometheus_storage_retention_time: "60d"
 
 install_blackbox_exporter: false
 blackbox_exporter_version: 0.16.0
