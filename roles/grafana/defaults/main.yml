@@ -3,7 +3,7 @@ grafana_version: 7.1.1
 grafana_home_dir: "/var/lib/grafana"
 grafana_config_dir: "/etc/grafana"
 grafana_config_path: "{{ grafana_config_dir }}/defaults.ini"
-grafana_web_external_url: "%(protocol)s://%(domain)s:%(http_port)s/"
+grafana_web_external_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
 grafana_admin_user: "admin"
 grafana_cookie_secure: true
 grafana_github_client_id: ""

@@ -26,7 +26,7 @@
     - "/etc/ssl/caddy"
 
 - name: determine installed caddy version
-  shell: "caddy --version || true"
+  shell: "caddy version | awk '{ print $1 }' || true"
   register: caddy_version_output
 
 - name: set caddy_installed_version fact
@@ -36,8 +36,7 @@
   shell: |
     mkdir -p /tmp/caddy-{{ caddy_version }}
     cd /tmp/caddy-{{ caddy_version }}
-    curl -fsSL -o caddy.tgz 'https://caddyserver.com/download/linux/amd64?plugins=http.prometheus&license=personal&telemetry=off'
-    tar -xf caddy.tgz
+    curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
     install -m 0755 caddy /usr/local/bin/caddy-{{caddy_version}}
     setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy-{{caddy_version}}
     ln -sf /usr/local/bin/caddy-{{caddy_version}} /usr/local/bin/caddy
