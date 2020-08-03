@@ -16,3 +16,4 @@ alertmanager_version: 0.21.0
 alertmanager_config: "alertmanager.yml"
 # Must be absolute path
 alertmanager_rules_config: "/etc/prometheus/alert_rules.yml"
+alertmanager_web_external_url: "http://127.0.0.1:9093"

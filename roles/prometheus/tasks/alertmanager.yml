@@ -30,7 +30,7 @@
   notify: restart alertmanager
 
 - name: install alertmanager.service
-  copy:
+  template:
     src: alertmanager.service
     dest: /etc/systemd/system/alertmanager.service
   notify: restart alertmanager
