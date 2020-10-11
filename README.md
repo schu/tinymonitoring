@@ -29,8 +29,7 @@ hosts: all
     grafana_auth_github_client_id: "aaa"
     grafana_auth_github_client_secret: "bbb"
     grafana_auth_github_organizations: "ccc"
-    grafana_dashboard_files:
-      - "{{ playbook_dir }}/files/grafana/dashboards/http.json"
+    grafana_dashboards_dir: "{{ playbook_dir }}/files/all/grafana/dashboards"
 ```
 
 ### Caddyfile

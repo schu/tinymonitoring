@@ -11,5 +11,5 @@ grafana_github_client_secret: ""
 grafana_auth_github_organizations: ""
 grafana_metrics_basic_auth_username: ""
 grafana_metrics_basic_auth_password: ""
-grafana_dashboard_files: []
+grafana_dashboards_dir: ""
 grafana_auto_assign_org_role: "Editor"

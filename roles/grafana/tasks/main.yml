@@ -64,10 +64,9 @@
 
 - name: copy grafana dashboards
   copy:
-    src: "{{ item }}"
+    src: "{{ grafana_dashboards_dir }}/"
     dest: "{{ grafana_home_dir }}/dashboards"
-  loop: "{{ grafana_dashboard_files }}"
-  when: grafana_dashboard_files is defined
+  when: grafana_dashboards_dir is defined
 
 - name: install grafana.service
   template:
