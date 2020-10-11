@@ -1,0 +1,3 @@
+---
+iptables_rules_file: iptables.rules
+ip6tables_rules_file: ip6tables.rules

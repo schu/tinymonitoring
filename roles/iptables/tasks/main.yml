@@ -1,0 +1,29 @@
+---
+- name: update apt cache
+  apt:
+    update_cache: yes
+
+- name: install iptables-persistent
+  apt:
+    name: "iptables-persistent"
+    state: latest
+
+- name: enable and start netfilter-persistent service
+  systemd:
+    name: netfilter-persistent
+    enabled: yes
+    state: started
+
+- name: copy iptables rules
+  copy:
+    src: "{{iptables_rules_file}}"
+    dest: "/etc/iptables/rules.v4"
+    mode: 0644
+  notify: restart netfilter-persistent
+
+- name: copy ip6tables rules
+  copy:
+    src: "{{ip6tables_rules_file}}"
+    dest: "/etc/iptables/rules.v6"
+    mode: 0644
+  notify: restart netfilter-persistent

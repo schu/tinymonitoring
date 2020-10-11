@@ -12,6 +12,7 @@ Example:
 ```
 hosts: all
   roles:
+    - iptables # Not required but recommended (only allow ports 22,80,443)
     - caddy
     - prometheus
     - grafana
