@@ -1,4 +1,4 @@
 ---
-caddy_version: v2.1.1
+caddy_version: v2.2.0
 caddy_home_dir: /var/www
 caddy_file: Caddyfile
