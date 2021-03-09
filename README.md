@@ -24,6 +24,9 @@ hosts: all
     install_alertmanager: true
     alertmanager_rules_config: "{{ playbook_dir }}/files/prometheus/alert_rules.yml"
     alertmanager_config: "{{ playbook_dir }}/files/prometheus/alertmanager.yml"
+    # Note: if alertmanager has a path prefix (as in this example,
+    # "/alertmanager"), it needs to be set accordingly in the Prometheus
+    # config file.
     alertmanager_web_external_url: "https://monitoring.example.com/alertmanager/"
     grafana_web_external_url: "https://monitoring.example.com/grafana/"
     grafana_admin_user: "demo"
