@@ -61,3 +61,7 @@ monitoring.example.com {
         reverse_proxy /alertmanager* 127.0.0.1:9093
 }
 ```
+
+## Updating tinymonitoring
+
+Note: look for `Breaking change` in the commit log before updating.
