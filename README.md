@@ -68,3 +68,7 @@ monitoring.example.com {
 ## Updating tinymonitoring
 
 Note: look for `Breaking change` in the commit log before updating.
+
+## License
+
+Apache 2.0
