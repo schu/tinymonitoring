@@ -1,5 +1,5 @@
 ---
-prometheus_version: 2.25.0
+prometheus_version: 2.30.0
 prometheus_home_dir: "/var/lib/prometheus"
 prometheus_data_dir: "{{ prometheus_home_dir }}/data"
 prometheus_config_dir: "/etc/prometheus"
@@ -8,11 +8,11 @@ prometheus_config: "prometheus.yml"
 prometheus_storage_retention_time: "60d"
 
 install_blackbox_exporter: false
-blackbox_exporter_version: 0.18.0
+blackbox_exporter_version: 0.19.0
 blackbox_exporter_config: "blackbox.yml"
 
 install_alertmanager: false
-alertmanager_version: 0.21.0
+alertmanager_version: 0.23.0
 alertmanager_config: "alertmanager.yml"
 # Must be absolute path
 alertmanager_rules_config: "/etc/prometheus/alert_rules.yml"
