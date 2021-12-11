@@ -1,6 +1,6 @@
 # tinymonitoring
 
-tinymonitoring is a set of simple Ansible roles to setup
+tinymonitoring is a set of simple Ansible roles to set up
 
 * Prometheus
 * Alertmanager
