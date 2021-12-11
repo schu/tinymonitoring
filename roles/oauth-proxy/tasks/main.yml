@@ -1,0 +1,62 @@
+---
+- name: create group
+  group:
+    name: oauthproxy
+    system: yes
+
+- name: create user
+  user:
+    name: oauthproxy
+    group: oauthproxy
+    system: yes
+    createhome: no
+    home: "{{ oauthproxy_home_dir }}"
+    shell: /sbin/nologin
+
+- name: create directories
+  file:
+    state: directory
+    path: "{{ item }}"
+    owner: oauthproxy
+    group: oauthproxy
+    mode: 0750
+  with_items:
+    - "{{ oauthproxy_home_dir }}"
+
+- name: determine installed oauth proxy version
+  shell: "oauth2-proxy --version | awk '{ print $2 }' || true"
+  register: oauthproxy_version_output
+
+- name: set oauthproxy_installed_version fact
+  set_fact: oauthproxy_installed_version="{{oauthproxy_version_output.stdout}}"
+
+- name: install oauth proxy
+  shell: |
+    mkdir -p /tmp/caddy-{{ oauthproxy_version }}
+    cd /tmp/caddy-{{ oauthproxy_version }}
+    curl -fsSLO https://github.com/oauth2-proxy/oauth2-proxy/releases/download/{{oauthproxy_version}}/oauth2-proxy-{{oauthproxy_version}}.linux-amd64.tar.gz
+    tar xvfz oauth2-proxy-{{oauthproxy_version}}.linux-amd64.tar.gz
+    install -m 0755 oauth2-proxy-{{oauthproxy_version}}.linux-amd64/oauth2-proxy /usr/local/bin/oauth2-proxy
+  args:
+    warn: false
+  when: oauthproxy_installed_version != oauthproxy_version
+  notify: restart oauthproxy
+
+- name: install oauth proxy config file
+  copy:
+    src: "{{ oauthproxy_config }}"
+    dest: /etc/oauth2-proxy.cfg
+    owner: oauthproxy
+    group: oauthproxy
+  notify: reload oauthproxy
+
+- name: install oauth2-proxy.service
+  copy:
+    src: oauth2-proxy.service
+    dest: /etc/systemd/system/oauth2-proxy.service
+  notify: restart oauthproxy
+
+- name: enable oauth2-proxy.service
+  systemd:
+    name: oauth2-proxy
+    enabled: true

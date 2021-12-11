@@ -1,0 +1,3 @@
+---
+oauthproxy_version: v7.2.0
+oauthproxy_home_dir: '/var/lib/oauthproxy'
