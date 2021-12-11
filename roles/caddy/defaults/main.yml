@@ -2,3 +2,4 @@
 caddy_version: v2.4.6
 caddy_home_dir: /var/www
 caddy_file: Caddyfile
+caddy_site_address: http://localhost:8080

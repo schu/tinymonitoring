@@ -1,15 +1,10 @@
 ---
-grafana_version: 8.2.6
+grafana_version: 8.3.2
 grafana_home_dir: "/var/lib/grafana"
 grafana_config_dir: "/etc/grafana"
 grafana_config_path: "{{ grafana_config_dir }}/defaults.ini"
 grafana_web_external_url: "%(protocol)s://%(domain)s:%(http_port)s/grafana/"
 grafana_admin_user: "admin"
 grafana_cookie_secure: true
-grafana_github_client_id: ""
-grafana_github_client_secret: ""
-grafana_auth_github_organizations: ""
-grafana_metrics_basic_auth_username: ""
-grafana_metrics_basic_auth_password: ""
 grafana_dashboards_dir: ""
 grafana_auto_assign_org_role: "Editor"

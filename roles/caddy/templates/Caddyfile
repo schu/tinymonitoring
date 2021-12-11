@@ -1,0 +1,9 @@
+{{ caddy_site_address }} {
+	encode gzip
+
+	log {
+		output stdout
+	}
+
+	reverse_proxy /* 127.0.0.1:4180
+}

@@ -1,68 +1,76 @@
 # tinymonitoring
 
-A set of simple Ansible roles to setup Prometheus, Alertmanager and Blackbox
-exporter behind Caddy on a virtual machine.
+tinymonitoring is a set of simple Ansible roles to setup
+
+* Prometheus
+* Alertmanager
+* Blackbox exporter
+
+behind Caddy & OAuth2 Proxy.
 
 ## Configuration
 
-### playbook.yml
-
-Example:
+### Example `playbook.yml`
 
 ```
 hosts: all
   roles:
     - iptables # Not required but recommended (only allow ports 22,80,443)
     - caddy
+    - oauthproxy
     - prometheus
     - grafana
   vars:
-    caddy_file: "{{ playbook_dir }}/files/caddy/Caddyfile"
+    caddy_site_address: "https://monitoring.example.com"
+
+    oauthproxy_config: "{{ playbook_dir }}/files/oauthproxy/oauth2-proxy.cfg"
+
     prometheus_config: "{{ playbook_dir }}/files/prometheus/prometheus.yml"
-    prometheus_web_external_url: "https://montoring.example.com/prometheus/"
+    prometheus_web_external_url: "https://monitoring.example.com/prometheus/"
+
     install_blackbox_exporter: true
     install_alertmanager: true
-    alertmanager_rules_config: "{{ playbook_dir }}/files/prometheus/alert_rules.yml"
-    alertmanager_config: "{{ playbook_dir }}/files/prometheus/alertmanager.yml"
+
     # Note: if alertmanager has a path prefix (as in this example,
     # "/alertmanager"), it needs to be set accordingly in the Prometheus
     # config file.
     alertmanager_web_external_url: "https://monitoring.example.com/alertmanager/"
+    alertmanager_rules_config: "{{ playbook_dir }}/files/prometheus/alert_rules.yml"
+    alertmanager_config: "{{ playbook_dir }}/files/prometheus/alertmanager.yml"
+
     grafana_web_external_url: "https://monitoring.example.com/grafana/"
     grafana_admin_user: "demo"
-    grafana_auth_github_client_id: "aaa"
-    grafana_auth_github_client_secret: "bbb"
-    grafana_auth_github_organizations: "ccc"
-    grafana_dashboards_dir: "{{ playbook_dir }}/files/all/grafana/dashboards"
+    grafana_dashboards_dir: "{{ playbook_dir }}/files/grafana/dashboards"
 ```
 
-### Caddyfile
-
-Example:
+### Example `oauthproxy_config`
 
 ```
-monitoring.example.com {
-        encode gzip
+http_address = "127.0.0.1:4180"
 
-        log {
-                output stdout
-                format logfmt
-        }
+upstreams = [
+  "http://127.0.0.1:9090/prometheus/",
+  "http://127.0.0.1:3000/grafana/",
+  "http://127.0.0.1:9093/alertmanager/",
+]
 
-        @restrictedpaths {
-                path /prometheus*
-                path /alertmanager*
-                path /grafana/metrics
-        }
-        basicauth @restrictedpaths {
-                # caddy hash-password -plaintext demo
-                demo JDJhJDEwJFRsNUNCMHFjRmUvbktLZmdzeGVRWGVRaGVMWlouc0lNT0g2QXBoY28yVDdrcGZqbXJkRkQ2
-        }
+email_domains = "*"
 
-        reverse_proxy /prometheus* 127.0.0.1:9090
-        reverse_proxy /grafana* 127.0.0.1:3000
-        reverse_proxy /alertmanager* 127.0.0.1:9093
-}
+pass_user_headers = "true"
+
+# See https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/oauth_provider
+# for a list of supported providers and config options
+provider = "github"
+
+client_id = "aaa"
+client_secret = "bbb"
+
+github_org = "ccc"
+
+# Make sure to create and set a cookie secret
+# python -c 'import os,base64; print(base64.urlsafe_b64encode(os.urandom(32)).decode())'
+cookie_secret = ""
+cookie_secure = "true"
 ```
 
 ## Updating tinymonitoring

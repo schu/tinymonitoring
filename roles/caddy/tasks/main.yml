@@ -46,8 +46,8 @@
   notify: restart caddy
 
 - name: install caddyfile
-  copy:
-    src: "{{ caddy_file }}"
+  template:
+    src: Caddyfile
     dest: /etc/caddy/Caddyfile
     owner: www-data
     group: www-data

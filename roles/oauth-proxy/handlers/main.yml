@@ -1,0 +1,12 @@
+---
+- name: reload oauthproxy
+  systemd:
+    name: oauth2-proxy
+    state: reloaded
+    daemon_reload: yes
+
+- name: restart oauthproxy
+  systemd:
+    name: oauth2-proxy
+    state: restarted
+    daemon_reload: yes
