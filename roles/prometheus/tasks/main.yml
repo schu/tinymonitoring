@@ -87,10 +87,10 @@
     name: prometheus
     enabled: true
 
-- include: blackbox-exporter.yml
+- import_tasks: blackbox-exporter.yml
   when: install_blackbox_exporter | bool
 
-- include: alertmanager.yml
+- import_tasks: alertmanager.yml
   when: install_alertmanager | bool
 
 - name: clean up old binaries
