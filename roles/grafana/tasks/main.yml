@@ -40,6 +40,8 @@
     tar -C /opt/ -xf grafana.tgz
     ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-server /usr/local/bin/grafana-server
     ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-cli /usr/local/bin/grafana-cli
+    # Delete assets of previous installs
+    find /opt/ -maxdepth 1 -type d -name "grafana-*" -not -name "grafana-{{grafana_installed_version}}" -not -name "grafana-{{grafana_version}}" -exec rm -r "{}" \;
   args:
     warn: false
   when: grafana_installed_version != grafana_version

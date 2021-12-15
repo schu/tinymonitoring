@@ -25,6 +25,13 @@
     - "{{ prometheus_data_dir }}"
     - "{{ prometheus_config_dir }}"
 
+- name: determine installed prometheus version
+  shell: prometheus --version 2>&1 | awk '/prometheus, version/{print $3}'
+  register: prometheus_version_output
+
+- name: set prometheus_installed_version fact
+  set_fact: prometheus_installed_version="{{prometheus_version_output.stdout}}"
+
 - stat: path=/tmp/prometheus-{{prometheus_version}}.linux-amd64.tar.gz
   register: prometheus_tar_gz
 
@@ -43,24 +50,11 @@
     tar xvfz prometheus-{{prometheus_version}}.linux-amd64.tar.gz;
   when: prometheus_dist.stat.exists == False
 
-- stat: path=/usr/local/bin/prometheus-{{prometheus_version}}
-  register: prometheus_bin
-
 - name: install prometheus to /usr/local/bin
   shell: |
-    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus-{{prometheus_version}}
-    ln -sfn /usr/local/bin/prometheus-{{prometheus_version}} /usr/local/bin/prometheus
-  when: prometheus_bin.stat.exists == False
-
-- stat: path=/usr/local/bin/promtool-{{prometheus_version}}
-  register: promtool_bin
-
-- name: install promtool to /usr/local/bin
-  shell: |
-    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/promtool-{{prometheus_version}}
-    ln -sfn /usr/local/bin/promtool-{{prometheus_version}} /usr/local/bin/promtool
-  when: promtool_bin.stat.exists == False
-
+    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus
+    mv /tmp/prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/promtool
+  when: prometheus_installed_version != prometheus_version
 
 # Alert rules are part of the Prometheus config, so load them
 # here. promtool can only be used against the root Prometheus
@@ -98,3 +92,12 @@
 
 - include: alertmanager.yml
   when: install_alertmanager | bool
+
+- name: clean up old binaries
+  shell: |
+    rm -f /usr/local/bin/prometheus-*
+    rm -f /usr/local/bin/promtool-*
+    rm -f /usr/local/bin/alertmanager-*
+    rm -f /usr/local/bin/amtool-*
+    rm -f /usr/local/bin/blackbox_exporter-*
+  tags: ['never', 'clean-up-old-binaries']
