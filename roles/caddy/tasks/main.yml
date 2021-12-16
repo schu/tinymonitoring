@@ -37,9 +37,8 @@
     mkdir -p /tmp/caddy-{{ caddy_version }}
     cd /tmp/caddy-{{ caddy_version }}
     curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
-    install -m 0755 caddy /usr/local/bin/caddy-{{caddy_version}}
-    setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy-{{caddy_version}}
-    ln -sf /usr/local/bin/caddy-{{caddy_version}} /usr/local/bin/caddy
+    install -m 0755 caddy /usr/local/bin/caddy
+    setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
   args:
     warn: false
   when: caddy_installed_version != caddy_version
@@ -64,3 +63,8 @@
     name: caddy
     enabled: true
     state: started
+
+- name: clean up old binaries
+  shell: |
+    rm -f /usr/local/bin/caddy-*
+  tags: ['never', 'clean-up-old-binaries']

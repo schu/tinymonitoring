@@ -55,6 +55,7 @@ hosts: all
 http_address = "127.0.0.1:4180"
 
 upstreams = [
+  "file:///var/lib/oauthproxy/www-index/#/",
   "http://127.0.0.1:9090/prometheus/",
   "http://127.0.0.1:3000/grafana/",
   "http://127.0.0.1:9093/alertmanager/",

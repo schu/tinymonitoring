@@ -17,13 +17,12 @@
     tar xvfz blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64.tar.gz;
   when: blackbox_exporter_dist.stat.exists == False
 
-- stat: path=/usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}}
+- stat: path=/usr/local/bin/blackbox_exporter
   register: blackbox_exporter_bin
 
 - name: install blackbox_exporter to /usr/local/bin
   shell: |
-    mv /tmp/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64/blackbox_exporter /usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}}
-    ln -sfn /usr/local/bin/blackbox_exporter-{{blackbox_exporter_version}} /usr/local/bin/blackbox_exporter
+    mv /tmp/blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64/blackbox_exporter /usr/local/bin/blackbox_exporter
   when: blackbox_exporter_bin.stat.exists == False
 
 - name: install blackbox_exporter config

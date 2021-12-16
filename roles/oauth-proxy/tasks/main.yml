@@ -22,6 +22,12 @@
     mode: 0750
   with_items:
     - "{{ oauthproxy_home_dir }}"
+    - "{{ oauthproxy_home_dir }}/www-index"
+
+- name: install index html
+  copy:
+    src: index.html
+    dest: "{{ oauthproxy_home_dir }}/www-index/index.html"
 
 - name: determine installed oauth proxy version
   shell: "oauth2-proxy --version | awk '{ print $2 }' || true"

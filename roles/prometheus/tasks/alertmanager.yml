@@ -12,10 +12,8 @@
     cd /tmp/alertmanager
     curl -fsSLO 'https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager_version }}/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz'
     tar -xf "alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
-    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager" /usr/local/bin/alertmanager-{{ alertmanager_version }}
-    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/amtool" /usr/local/bin/amtool-{{ alertmanager_version }}
-    ln -sf /usr/local/bin/alertmanager-{{ alertmanager_version }} /usr/local/bin/alertmanager
-    ln -sf /usr/local/bin/amtool-{{ alertmanager_version }} /usr/local/bin/amtool
+    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager" /usr/local/bin/alertmanager
+    install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/amtool" /usr/local/bin/amtool
   args:
     warn: false
   when: alertmanager_installed_version != alertmanager_version
