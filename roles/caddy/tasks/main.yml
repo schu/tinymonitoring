@@ -34,8 +34,7 @@
 
 - name: install caddy
   shell: |
-    mkdir -p /tmp/caddy-{{ caddy_version }}
-    cd /tmp/caddy-{{ caddy_version }}
+    cd `mktemp -d`
     curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
     install -m 0755 caddy /usr/local/bin/caddy
     setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
@@ -46,7 +45,7 @@
 
 - name: install caddyfile
   template:
-    src: Caddyfile
+    src: "{{ caddy_file }}"
     dest: /etc/caddy/Caddyfile
     owner: www-data
     group: www-data
