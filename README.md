@@ -49,7 +49,7 @@ hosts: all
     grafana_dashboards_dir: "{{ playbook_dir }}/files/grafana/dashboards"
 ```
 
-### Example `oauthproxy_config`
+### Example `oauthproxy_config` for GitHub auth
 
 ```
 http_address = "127.0.0.1:4180"
@@ -78,6 +78,10 @@ github_org = "ccc"
 # python -c 'import os,base64; print(base64.urlsafe_b64encode(os.urandom(32)).decode())'
 cookie_secret = ""
 cookie_secure = "true"
+
+# The OAuth2 Proxy default is "168h0m0s", you might want to reduce the
+# cookie lifetime
+cookie_expire = "24h0m0s"
 ```
 
 ## Updating tinymonitoring

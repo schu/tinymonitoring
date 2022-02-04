@@ -8,10 +8,9 @@
 
 - name: install alertmanager
   shell: |
-    mkdir -p /tmp/alertmanager
-    cd /tmp/alertmanager
+    cd `mktemp -d`
     curl -fsSLO 'https://github.com/prometheus/alertmanager/releases/download/v{{ alertmanager_version }}/alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz'
-    tar -xf "alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
+    tar xvfz "alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
     install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager" /usr/local/bin/alertmanager
     install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/amtool" /usr/local/bin/amtool
   args:
