@@ -1,5 +1,5 @@
 ---
-grafana_version: 8.4.2
+grafana_version: 8.4.3
 grafana_home_dir: "/var/lib/grafana"
 grafana_config_dir: "/etc/grafana"
 grafana_config_path: "{{ grafana_config_dir }}/defaults.ini"
