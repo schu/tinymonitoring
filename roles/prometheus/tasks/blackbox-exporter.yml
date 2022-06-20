@@ -13,6 +13,7 @@
     tar xvfz blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64.tar.gz
     install -m 0755 blackbox_exporter-{{blackbox_exporter_version}}.linux-amd64/blackbox_exporter /usr/local/bin/blackbox_exporter
   when: blackbox_exporter_installed_version != blackbox_exporter_version
+  notify: restart blackbox_exporter
 
 - name: install blackbox_exporter config
   copy:

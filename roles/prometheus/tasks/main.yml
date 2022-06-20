@@ -40,6 +40,7 @@
     install -m 0755 prometheus-{{prometheus_version}}.linux-amd64/prometheus /usr/local/bin/prometheus
     install -m 0755 prometheus-{{prometheus_version}}.linux-amd64/promtool /usr/local/bin/promtool
   when: prometheus_installed_version != prometheus_version
+  notify: restart prometheus
 
 # Alert rules are part of the Prometheus config, so load them
 # here. promtool can only be used against the root Prometheus

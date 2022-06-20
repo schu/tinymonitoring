@@ -45,6 +45,7 @@
   args:
     warn: false
   when: grafana_installed_version != grafana_version
+  notify: restart grafana
 
 - name: install grafana config
   template:

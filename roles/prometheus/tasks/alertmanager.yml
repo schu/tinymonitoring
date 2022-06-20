@@ -16,6 +16,7 @@
   args:
     warn: false
   when: alertmanager_installed_version != alertmanager_version
+  notify: restart alertmanager
 
 - name: install alertmanager config
   copy:
