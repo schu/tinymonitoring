@@ -82,6 +82,9 @@ cookie_secure = "true"
 # The OAuth2 Proxy default is "168h0m0s", you might want to reduce the
 # cookie lifetime
 cookie_expire = "24h0m0s"
+
+# https://github.com/oauth2-proxy/oauth2-proxy/issues/1724
+scope = "user:email"
 ```
 
 ## Updating tinymonitoring
