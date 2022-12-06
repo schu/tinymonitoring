@@ -11,8 +11,8 @@ behind Caddy & OAuth2 Proxy.
 The goal is to provide a low-cost and low-maintenance monitoring option
 for individuals and small teams.
 
-tinymonitoring is meant to be installed on a separate VM (tested on
-Ubuntu LTS).
+tinymonitoring is meant to be installed on a separate VM or system container.
+Tested on Ubuntu LTS.
 
 ## Configuration
 
