@@ -38,8 +38,6 @@
     curl -fsSL -o caddy 'https://caddyserver.com/api/download?os=linux&arch=amd64'
     install -m 0755 caddy /usr/local/bin/caddy
     setcap 'cap_net_bind_service=+ep' /usr/local/bin/caddy
-  args:
-    warn: false
   when: caddy_installed_version != caddy_version
   notify: restart caddy
 

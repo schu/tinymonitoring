@@ -13,8 +13,6 @@
     tar xvfz "alertmanager-{{ alertmanager_version }}.linux-amd64.tar.gz"
     install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/alertmanager" /usr/local/bin/alertmanager
     install -m 0755 "alertmanager-{{ alertmanager_version }}.linux-amd64/amtool" /usr/local/bin/amtool
-  args:
-    warn: false
   when: alertmanager_installed_version != alertmanager_version
   notify: restart alertmanager
 

@@ -42,8 +42,6 @@
     curl -fsSLO https://github.com/oauth2-proxy/oauth2-proxy/releases/download/{{oauthproxy_version}}/oauth2-proxy-{{oauthproxy_version}}.linux-amd64.tar.gz
     tar xvfz oauth2-proxy-{{oauthproxy_version}}.linux-amd64.tar.gz
     install -m 0755 oauth2-proxy-{{oauthproxy_version}}.linux-amd64/oauth2-proxy /usr/local/bin/oauth2-proxy
-  args:
-    warn: false
   when: oauthproxy_installed_version != oauthproxy_version
   notify: restart oauthproxy
 
