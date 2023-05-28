@@ -8,7 +8,7 @@ prometheus_config: "prometheus.yml"
 prometheus_storage_retention_time: "60d"
 
 install_blackbox_exporter: false
-blackbox_exporter_version: 0.23.0
+blackbox_exporter_version: 0.24.0
 blackbox_exporter_config: "blackbox.yml"
 
 install_alertmanager: false
