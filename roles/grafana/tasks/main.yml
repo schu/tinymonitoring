@@ -37,7 +37,8 @@
     mkdir -p /tmp/grafana
     cd /tmp/grafana
     curl -fsSL -o grafana.tgz "https://dl.grafana.com/oss/release/grafana-{{ grafana_version }}.linux-amd64.tar.gz"
-    tar -C /opt/ -xf grafana.tgz
+    mkdir -p "/opt/grafana-{{ grafana_version }}"
+    tar -C "/opt/grafana-{{ grafana_version }}" --strip-components=1 -xf grafana.tgz
     ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-server /usr/local/bin/grafana-server
     ln -sf /opt/grafana-{{ grafana_version }}/bin/grafana-cli /usr/local/bin/grafana-cli
     # Delete assets of previous installs
