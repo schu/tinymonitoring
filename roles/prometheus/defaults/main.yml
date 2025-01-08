@@ -1,5 +1,5 @@
 ---
-prometheus_version: 2.54.1
+prometheus_version: 3.1.0
 prometheus_home_dir: "/var/lib/prometheus"
 prometheus_data_dir: "{{ prometheus_home_dir }}/data"
 prometheus_config_dir: "/etc/prometheus"
