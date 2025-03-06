@@ -46,7 +46,7 @@
   notify: restart oauthproxy
 
 - name: install oauth proxy config file
-  copy:
+  template:
     src: "{{ oauthproxy_config }}"
     dest: /etc/oauth2-proxy.cfg
     owner: oauthproxy
