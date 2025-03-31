@@ -12,7 +12,7 @@ blackbox_exporter_version: 0.25.0
 blackbox_exporter_config: "blackbox.yml"
 
 install_alertmanager: false
-alertmanager_version: 0.28.0
+alertmanager_version: 0.28.1
 alertmanager_config: "alertmanager.yml"
 # Must be absolute path
 alertmanager_rules_config: "/etc/prometheus/alert_rules.yml"
