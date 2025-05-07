@@ -1,5 +1,5 @@
 ---
-grafana_version: 11.6.1
+grafana_version: 12.0.0
 grafana_home_dir: "/var/lib/grafana"
 grafana_config_dir: "/etc/grafana"
 grafana_config_path: "{{ grafana_config_dir }}/defaults.ini"
