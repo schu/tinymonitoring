@@ -11,7 +11,7 @@ Group=grafana
 
 WorkingDirectory=/var/lib/grafana
 
-ExecStart=/usr/local/bin/grafana-server -config "{{ grafana_config_path }}" -homepath "/opt/grafana-{{ grafana_version }}"
+ExecStart=/usr/local/bin/grafana server -config "{{ grafana_config_path }}" -homepath "/opt/grafana-{{ grafana_version }}"
 
 PrivateTmp=true
 PrivateDevices=true
