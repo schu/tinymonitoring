@@ -25,8 +25,8 @@
     - "{{ grafana_config_dir }}/conf/provisioning/dashboards"
     - "{{ grafana_config_dir }}/conf/provisioning/datasources"
 
-- name: determine installed grafana-server version
-  shell: grafana-server -v | awk '/Version/{print $2}'
+- name: determine installed grafana server version
+  shell: grafana server -v | awk '/Version/{print $2}'
   register: grafana_version_output
 
 - name: set grafana_installed_version fact
